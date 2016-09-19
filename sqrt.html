@@ -1,0 +1,81 @@
+<body>
+  <head>
+    <title>SQRT</title>
+    <script>
+
+      function getNodes(ids)
+      {
+        var nodes;
+
+        nodes = [];
+        for (i in ids)
+        {
+          nodes[ids[i]] = document.getElementById(ids[i]);
+        }
+
+        return nodes;
+      }
+
+      function clear(node)
+      {
+        node.innerText = "";
+
+        return function (text) {
+          node.innerText += text + "\n";
+        };
+      }
+
+      window.onload = function () {
+        var nodes;
+
+        nodes = getNodes([ "input", "go", "output" ]);
+
+        nodes.go.onclick = function () {
+          var print, i, value, guess, previous;
+
+          // clear textarea and get a function that prints to it
+          print = clear(nodes.output);
+
+          i = 0;
+          value = parseFloat(nodes.input.value);
+          guess = value;
+          previous = 0;
+
+          if (value < 0)
+          {
+            print("Value may not be negative.");
+            return;
+          }
+
+          if (value === 0)
+          {
+            print("The result is 0.");
+            return;
+          }
+
+          // Heron's method begins here
+
+          while (previous !== guess)
+          {
+            print(i++ + ": " + guess); // our fluff
+
+            previous = guess;
+            guess = (guess + value / guess) / 2;
+          }
+
+          // Heron's method ends here
+
+          print("");
+          print("Last value is the square root of: " + (guess * guess));
+          print("Math.sqrt() diverges by: " + (Math.sqrt(value) - guess));
+        };
+      };
+
+    </script>
+  </head>
+  <body>
+    Square root of: <input type="text" id="input" value="1973" />
+    <input type="button" id="go" value="Go" /><br />
+    <pre id="output"></pre>
+  </body>
+</body>
